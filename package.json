@@ -12,5 +12,8 @@
     "report": "node scripts/validate-weekly-report.mjs",
     "activity": "node scripts/analyze-commits.mjs",
     "grade": "node scripts/evaluate-progress.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^3.3.0"
   }
 }
