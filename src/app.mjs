@@ -1,22 +1,29 @@
-import { createInterface } from "node:readline/promises";
+import { createInterface } from "node:readline";
 import { stdin, stdout } from "node:process";
 import { generateStudyGuide } from "./study-guide.mjs";
 
-const terminal = createInterface({ input: stdin, output: stdout });
+const terminal = createInterface({
+  input: stdin,
+  output: stdout,
+  crlfDelay: Infinity,
+});
+
+console.log("Paste your study material below.");
+console.log("When you're done, type END on a new line and press Enter.");
+
+const lines = [];
 
 try {
-  console.log("Paste your study material below.");
-  console.log("When you're done, type END on a new line and press Enter.");
+  for await (const line of terminal) {
+    if (line.trim().toUpperCase() === "END") {
+      break;
+    }
 
-  const lines = [];
-
-  while (true) {
-    const line = await terminal.question("");
-    if (line.trim().toUpperCase() === "END") break;
     lines.push(line);
   }
 
-  const studyGuide = await generateStudyGuide(lines.join("\n"));
+  const studyMaterial = lines.join("\n");
+  const studyGuide = await generateStudyGuide(studyMaterial);
 
   console.log("\n--- Your StudyBuddy Guide ---\n");
   console.log(studyGuide);
